@@ -44,7 +44,7 @@
        __result = obj<value<Mat>>(dst);"))
 
 (defn wait-key [n]
-  "cv::waitKey(number::to<number_t>(n));")
+  "__result = obj<number>(cv::waitKey(number::to<number_t>(n)));")
 
 (defnative bgr-to-hsv [i t]
   (on "defined FERRET_STD_LIB"
@@ -80,7 +80,16 @@
   (on "defined FERRET_STD_LIB"
       ("opencv2/opencv.hpp")
       "using namespace cv;
-       VideoCapture cap(number::to<number_t>(n));
+       VideoCapture cap;
+
+       if (n.is_type(runtime::type::number))
+         cap.open(number::to<number_t>(n));
+       else
+         cap.open(string::to<std::string>(n));
+
+       if (!cap.isOpened())
+         return nil();
+
        __result = obj<value<VideoCapture>>(cap);"))
 
 (defnative query-capture [c]
