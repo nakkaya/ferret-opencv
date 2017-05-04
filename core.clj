@@ -92,6 +92,12 @@
 
        __result = obj<value<VideoCapture>>(cap);"))
 
+(defnative video-capture-release [c]
+  (on "defined FERRET_STD_LIB"
+      ("opencv2/opencv.hpp")
+      "using namespace cv;
+       value<VideoCapture>::to_value(c).release();"))
+
 (defnative query-capture [c]
   (on "defined FERRET_STD_LIB"
       ("opencv2/opencv.hpp")
